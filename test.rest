@@ -17,7 +17,8 @@ Content-Type: application/json
 
 {
     "data_id": 0,
-    "rating": 5,
+    "rating_information": 5,
+    "rating_relevence": 5,
     "comment": "test",
     "name": "test",
     "organization": "test"

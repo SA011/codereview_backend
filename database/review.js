@@ -3,7 +3,7 @@ const {getConnection, release} = require('./connect.js');
 const getDataByIDCommand = "SELECT * FROM review_data WHERE data_id = $1";
 const getDataBylangCommand = "SELECT data_id FROM review_data WHERE lang = $1::text";
 const countReviewCommand = "SELECT COUNT(*) FROM review_comments WHERE data_id = $1";
-const addReviewCommentCommand = "INSERT INTO review_comments(data_id, rating, comment, name, organization) VALUES($1, $2, $3, $4, $5)";
+const addReviewCommentCommand = "INSERT INTO review_comments(data_id, rating_information, rating_relevence, comment, name, organization) VALUES($1, $2, $3, $4, $5, $6)";
 module.exports.getDataByID = async (data_id) => {
     // console.log(data_id);
     const pool = await getConnection();
@@ -50,9 +50,9 @@ module.exports.getDataBylang = async (lang) => {
 }
 
 
-module.exports.addReviewComment = async (data_id, rating, comment, name, organization) => {
+module.exports.addReviewComment = async (data_id, rating_information, rating_relevence, comment, name, organization) => {
     const pool = await getConnection();
-    const res = (await pool.query(addReviewCommentCommand, [data_id, rating, comment, name, organization])).rows;
+    const res = (await pool.query(addReviewCommentCommand, [data_id, rating_information, rating_relevence, comment, name, organization])).rows;
     release(pool);
     // console.log(res);
     return res;
