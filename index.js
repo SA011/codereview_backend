@@ -10,6 +10,9 @@ const cors = require('cors');
 const PORT = process.env.PORT || 8080;
 const app = Express();
 
+app.use(cors({
+    origin: process.env.ORIGIN
+}));
 app.use(Express.json());
 app.use('/api',router);
 

@@ -3,12 +3,7 @@ GET http://localhost:8081/api/review/0
 ###
 
 ###
-GET http://localhost:8081/api/review
-Content-Type: application/json
-
-{
-    "lang": "c"
-}
+GET http://localhost:8081/api/review/c
 ###
 
 ###

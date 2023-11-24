@@ -9,17 +9,21 @@ module.exports.getDataByID = async (req, res) => {
 langlist = ['c', 'cpp', '.cs', 'go', 'java', 'js', 'py', 'rb', 'php'];
 
 module.exports.getDataByLang = async (req, res) => {
-    lang = req.body.lang;
+    // lang = req.body.lang;
+    lang = req.params.lang;
     // console.log(lang);
     if(lang == undefined || langlist.indexOf(lang) == -1){
-        res.send(404);
+        res.sendStatus(404);
     }else{
-        res.send(await reviewDatabase.getDataBylang(lang));
+        const ret = await reviewDatabase.getDataBylang(lang);
+        // res.send(await reviewDatabase.getDataBylang(lang));
+        // console.log(ret);
+        res.send(ret);
     }
 }
 
 module.exports.addReviewComment = async (req, res) => {
     // console.log(req.body);
-    const data = await reviewDatabase.addReviewComment(req.body.data_id, req.body.rating_information, req.body.rating_relevence, req.body.comment, req.body.name, req.body.organization);
+    const data = await reviewDatabase.addReviewComment(req.body.data_id, req.body.rating_information, req.body.rating_relevance, req.body.comment, req.body.name, req.body.organization);
     res.sendStatus(200);
 }
