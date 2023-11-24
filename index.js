@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 8080;
 const app = Express();
 
 app.use(cors({
-    origin: process.env.ORIGIN
+    origin: "*"
 }));
 app.use(Express.json());
 app.use('/api',router);
