@@ -33,7 +33,7 @@ async function selectData(data){
         // console.log(res);
         if(res.length != 1)continue;
         if(res[0].count < 2){
-            console.log(id);
+            // console.log(id);
             return id;
         }
     }
@@ -43,7 +43,7 @@ async function selectData(data){
 
 module.exports.getDataBylang = async (lang) => {
     const pool = await getConnection();
-    console.log(lang);
+    // console.log(lang);
     const res = (await pool.query(getDataBylangCommand, [lang])).rows;
     release(pool);
     // console.log(res);
