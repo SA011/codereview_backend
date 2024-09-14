@@ -5,10 +5,7 @@ const config = {
     host: process.env.PGHOST,
     database: process.env.PGDATABASE,
     password: process.env.PGPASSWORD,
-    port: process.env.PGPORT,
-    idleTimeoutMillis: 1000,
-    connectionTimeoutMillis: 1000,
-    ssl: true
+    port: process.env.PGPORT
 };
 module.exports.getConnection = async () => {
     try {
