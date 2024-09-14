@@ -46,7 +46,7 @@ module.exports.getDataBylang = async (lang) => {
     console.log(lang);
     const res = (await pool.query(getDataBylangCommand, [lang])).rows;
     release(pool);
-    // console.log(res);
+    console.log(res);
     return await this.getDataByID(await selectData(res));
 }
 
