@@ -28,8 +28,11 @@ async function selectData(data){
     for(let i = 0; i < data.length; i++){
         id = data[i].data_id;   
         const pool = await getConnection();
-        const res = (await pool.query(countReviewCommand, [id])).rows;
-        release(pool);
+        const res = (await pool.query(countReviewCommand, [id]).then(results => {
+            release(pool)
+            return results;
+          })).rows;
+        
         // console.log(res);
         if(res.length != 1)continue;
         if(res[0].count < 2){
@@ -44,17 +47,29 @@ async function selectData(data){
 module.exports.getDataBylang = async (lang) => {
     const pool = await getConnection();
     console.log(lang);
-    const res = (await pool.query(getDataBylangCommand, [lang])).rows;
-    release(pool);
+    const res = (await pool.query(getDataBylangCommand, [lang]).then(results => {
+        release(pool);
+        return results;
+    })).rows;
     console.log(res);
-    return await this.getDataByID(await selectData(res));
+    id = await selectData(res).then(data_id => {
+        console.log(data_id);
+        return data_id;
+    });
+    ret = await this.getDataByID(id).then(data => {
+        return data;
+    });
+    return ret;
 }
 
 
 module.exports.addReviewComment = async (data_id, rating_information, rating_relevance, comment, name, organization) => {
     const pool = await getConnection();
-    const res = (await pool.query(addReviewCommentCommand, [data_id, rating_information, rating_relevance, comment, name, organization])).rows;
-    release(pool);
+    const res = (await pool.query(addReviewCommentCommand, [data_id, rating_information, rating_relevance, comment, name, organization]).then(results => {
+        release(pool);
+        return results;
+    })).rows;
+    
     // console.log(res);
     return res;
 }
