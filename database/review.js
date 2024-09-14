@@ -48,7 +48,7 @@ async function getDataByLang(lang){
     console.log(lang);
     const res = (await pool.query(getDataBylangCommand, [lang]).then(results => {
         console.log(results);
-        release(pool);
+        // release(pool);
         return results;
     })).rows;
     console.log(res);
