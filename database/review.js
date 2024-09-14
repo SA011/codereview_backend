@@ -1,3 +1,4 @@
+const { get } = require('../routes/review.js');
 const {getConnection, release} = require('./connect.js');
 
 const getDataByIDCommand = "SELECT * FROM review_data WHERE data_id = $1";
@@ -42,9 +43,7 @@ async function selectData(data){
     }
     return null;
 }
-
-
-module.exports.getDataBylang = async (lang) => {
+async function getDataByLang(lang){
     const pool = await getConnection();
     console.log(lang);
     const res = (await pool.query(getDataBylangCommand, [lang]).then(results => {
@@ -62,6 +61,8 @@ module.exports.getDataBylang = async (lang) => {
     });
     return ret;
 }
+
+module.exports.getDataBylang = getDataByLang;
 
 
 module.exports.addReviewComment = async (data_id, rating_information, rating_relevance, comment, name, organization) => {
