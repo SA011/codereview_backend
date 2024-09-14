@@ -43,15 +43,16 @@ async function selectData(data){
     }
     return null;
 }
-async function getDataByLang(lang){
+
+module.exports.getDataBylang = async (lang) => {
     const pool = await getConnection();
-    console.log(lang);
+    // console.log(lang);
     const res = (await pool.query(getDataBylangCommand, [lang]).then(results => {
-        console.log(results);
-        // release(pool);
+        // console.log(results);
+        release(pool);
         return results;
     })).rows;
-    console.log(res);
+    // console.log(res);
     id = await selectData(res).then(data_id => {
         console.log(data_id);
         return data_id;
@@ -60,9 +61,7 @@ async function getDataByLang(lang){
         return data;
     });
     return ret;
-}
-
-module.exports.getDataBylang = getDataByLang;
+};
 
 
 module.exports.addReviewComment = async (data_id, rating_information, rating_relevance, comment, name, organization) => {
