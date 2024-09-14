@@ -6,6 +6,8 @@ const config = {
     database: process.env.PGDATABASE,
     password: process.env.PGPASSWORD,
     port: process.env.PGPORT,
+    idleTimeoutMillis: 0,
+    connectionTimeoutMillis: 0,
     ssl: true
 };
 module.exports.getConnection = async () => {
