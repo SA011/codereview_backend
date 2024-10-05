@@ -24,6 +24,6 @@ module.exports.getDataByLang = async (req, res) => {
 
 module.exports.addReviewComment = async (req, res) => {
     // console.log(req.body);
-    const data = await reviewDatabase.addReviewComment(req.body.data_id, req.body.rating_information, req.body.rating_relevance, req.body.comment, req.body.name, req.body.organization);
+    const data = await reviewDatabase.addReviewComment(req.body.data_id, req.body.model, req.body.information, req.body.relevance, req.body.explanation_clarity, req.body.comment, req.body.name, req.body.organization);
     res.sendStatus(200);
 }
