@@ -3,6 +3,7 @@ const {getConnection, release} = require('./connect.js');
 
 const getDataByIDCommand = "SELECT * FROM review_data WHERE data_id = $1";
 const getDataBylangCommand = "SELECT data_id FROM review_data WHERE lang = $1::text";
+const getDataBylangCommandCount1 = "SELECT data_id FROM review_data WHERE lang = $1::text AND (SELECT COUNT(*) FROM review_comments WHERE data_id = review_data.data_id) = 1";
 const countReviewCommand = "SELECT COUNT(*) FROM review_comments WHERE data_id = $1";
 
 const addReviewCommentCommand = "INSERT INTO review_comments(data_id, comment, name, organization) VALUES($1, $2, $3, $4)";
@@ -38,7 +39,7 @@ async function selectData(data){
         
         // console.log(res);
         if(res.length != 1)continue;
-        if(res[0].count < 2){
+        if(res[0].count < 4){
             // console.log(id);
             return id;
         }
@@ -46,25 +47,63 @@ async function selectData(data){
     return null;
 }
 
+// module.exports.getDataBylang = async (lang) => {
+//     const pool = await getConnection();
+//     // console.log(lang);
+//     const res = (await pool.query(getDataBylangCommand, [lang]).then(results => {
+//         // console.log(results);
+//         release(pool);
+//         return results;
+//     })).rows;
+//     // console.log(res);
+//     id = await selectData(res).then(data_id => {
+//         // console.log(data_id);
+//         return data_id;
+//     });
+//     ret = await this.getDataByID(id).then(data => {
+//         return data;
+//     });
+//     return ret;
+// };
+
+
 module.exports.getDataBylang = async (lang) => {
     const pool = await getConnection();
     // console.log(lang);
-    const res = (await pool.query(getDataBylangCommand, [lang]).then(results => {
+    const resCount1 = (await pool.query(getDataBylangCommandCount1, [lang]).then(results => {
         // console.log(results);
         release(pool);
         return results;
     })).rows;
-    // console.log(res);
-    id = await selectData(res).then(data_id => {
-        // console.log(data_id);
-        return data_id;
-    });
-    ret = await this.getDataByID(id).then(data => {
-        return data;
-    });
-    return ret;
+    // console.log(resCount1);
+    if (resCount1.length >= 20){
+        id = await selectData(resCount1).then(data_id => {
+            // console.log(data_id);
+            return data_id;
+        });
+        ret = await this.getDataByID(id).then(data => {
+            return data;
+        });
+        return ret;
+    }
+    else{
+        const pool = await getConnection();
+        const res = (await pool.query(getDataBylangCommand, [lang]).then(results => {
+            // console.log(results);
+            release(pool);
+            return results;
+        })).rows;
+        // console.log(res);
+        id = await selectData(res).then(data_id => {
+            // console.log(data_id);
+            return data_id;
+        });
+        ret = await this.getDataByID(id).then(data => {
+            return data;
+        });
+        return ret;
+    }
 };
-
 
 module.exports.addReviewComment = async (data_id, model, information, relevance, explanation_clarity, comment, name, organization) => {
     const pool = await getConnection();
